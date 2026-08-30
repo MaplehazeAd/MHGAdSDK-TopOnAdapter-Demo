@@ -17,7 +17,7 @@
 
     NSDictionary *extra = @{
         ATAdSendC2SBidPriceKey: priceStr,
-        ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeCNYCents)
+        ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeUS)
     };
     [self.adStatusBridge atOnSplashAdLoadedExtra:extra];
 }

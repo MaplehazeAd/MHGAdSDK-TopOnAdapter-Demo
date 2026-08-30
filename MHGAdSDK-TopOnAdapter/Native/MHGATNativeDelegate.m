@@ -116,7 +116,7 @@ static NSArray<MHGNativeAdModel *> *_lastModels = nil;
 
         NSDictionary *adExtra = @{
             ATAdSendC2SBidPriceKey: priceStr,
-            ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeCNYCents)
+            ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeUS)
         };
         [self.adStatusBridge atOnNativeAdLoadedArray:@[nativeAdObj] adExtra:adExtra];
     }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'MHGAdSDK-TopOnAdapter'
-  s.version      = '1.0.0'
+  s.version      = '1.0.1'
   s.summary      = 'TopOn (TopOn) custom adapter for MHGAdSDK (Global).'
   s.description  = <<-DESC
     MHGAdSDK-TopOnAdapter is a custom network adapter for MHGAdSDK on the TopOn mediation platform.
