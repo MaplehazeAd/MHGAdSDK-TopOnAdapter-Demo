@@ -1,8 +1,8 @@
 //
 //  NativeModel.m
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
-//  Created by 郭建恒 on 2025/1/15.
+//  Created by Jianheng on 2025/1/15.
 //
 
 #import "NativeModel.h"

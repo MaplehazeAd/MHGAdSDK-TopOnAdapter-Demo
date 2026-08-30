@@ -1,6 +1,6 @@
 //
 //  MHMainTableViewCell.m
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
 //  Created by guojianheng on 2024/11/11.
 //
@@ -24,7 +24,7 @@
     return self;
 }
 
-// 布局UI元素
+// Layout UI elements
 - (void)layoutAllSubViews {
     
     self.contentLabel = [[UILabel alloc] init];

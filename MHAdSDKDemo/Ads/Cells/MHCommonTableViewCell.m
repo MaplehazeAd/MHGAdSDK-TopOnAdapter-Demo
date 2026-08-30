@@ -1,6 +1,6 @@
 //
 //  MHCommonTableViewCell.m
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
 //  Created by guojianheng on 2024/11/12.
 //
@@ -32,7 +32,6 @@
     return self;
 }
 
-// 布局UI元素
 - (void)layoutAllSubViews {
     
     self.titleLabel = [[UILabel alloc] init];
@@ -66,7 +65,7 @@
     }];
     
     self.inputTextField = [[UITextField alloc] init];
-    self.inputTextField.placeholder = @"请输入";
+    self.inputTextField.placeholder = @"placeholder";
     [self.inputTextField addTarget:self
                             action:@selector(textFieldDidEditingChange:)
                   forControlEvents:UIControlEventEditingChanged];
@@ -96,13 +95,12 @@
 
 - (void)valueSwitchDidChange:(UISwitch * )sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(mhCommonTableViewCellSwitchDidClick:isOpen:)]){
-        // 回调
+        // Callback
         [self.delegate mhCommonTableViewCellSwitchDidClick:self.indexPath isOpen:sender.isOn];
     }
 }
 
 - (void)checkBoxDidClick:(UIButton * )button {
-    // 取反
     self.model.isSelect = !self.model.isSelect;
     //
     if (self.model.isSelect == YES) {
@@ -112,14 +110,12 @@
     }
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(mhCommonTableViewCellCheckBoxDidClick:isSelect:)]){
-        // 回调
         [self.delegate mhCommonTableViewCellCheckBoxDidClick:self.indexPath isSelect:self.model.isSelect];
     }
 }
 
 - (void)buttonDidClick:(UIButton * )button {
     if (self.delegate && [self.delegate respondsToSelector:@selector(mhCommonTableViewCellButtonDidClick:)]){
-        // 回调
         [self.delegate mhCommonTableViewCellButtonDidClick:self.indexPath];
     }
 }
@@ -190,10 +186,10 @@
 }
 
 - (void)textFieldDidEditingChange:(UITextField *)textField {
-    // 直接使用 textField.text 就是最新的完整字符串
+    // Use textField.text directly as it already contains the latest full string
     NSString *fullText = textField.text;
-    NSLog(@"文本已改变：%@", fullText);
-    // 这里可以进行你的业务逻辑，如搜索、按钮状态更新等
+    NSLog(@"Text changed: %@", fullText);
+    // Business logic here, e.g. search, button state update, etc.
     if (self.delegate && [self.delegate respondsToSelector:@selector(mhCommonTableViewCellTextFieldValueChanged:text:)]) {
         [self.delegate mhCommonTableViewCellTextFieldValueChanged:self.indexPath text:fullText];
     }

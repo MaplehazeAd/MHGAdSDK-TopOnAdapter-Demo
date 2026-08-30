@@ -1,8 +1,8 @@
 //
 //  MHSettingViewController.m
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
-//  Created by 郭建恒 on 2025/6/5.
+//  Created by Jianheng on 2025/6/5.
 //
 
 #import "MHSettingViewController.h"
@@ -21,6 +21,12 @@
 @property (nonatomic, strong) UITextField *mediaEcpmTextField;
 @property (nonatomic, strong) UIButton *mediaEcpmSaveButton;
 
+@property (nonatomic, strong) UILabel *envLabel;
+@property (nonatomic, strong) UISwitch *envSwitch;
+
+@property (nonatomic, strong) UILabel *personalizedLabel;
+@property (nonatomic, strong) UISwitch *personalizedSwitch;
+
 @end
 
 @implementation MHSettingViewController
@@ -37,7 +43,7 @@
     
     
     self.isDebugLabel = [[UILabel alloc] init];
-    self.isDebugLabel.text = @"是否开启Debug调试模式";
+    self.isDebugLabel.text = @"Debug";
     [self.view addSubview:self.isDebugLabel];
     
     [self.isDebugLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -59,7 +65,7 @@
     }];
     
     self.mediaEcpmLabel = [[UILabel alloc] init];
-    self.mediaEcpmLabel.text = @"媒体竞价底价:";
+    self.mediaEcpmLabel.text = @"media ecpm:";
     [self.view addSubview:self.mediaEcpmLabel];
     [self.mediaEcpmLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.isDebugLabel.mas_bottom).offset(12);
@@ -77,7 +83,7 @@
     }];
     
     self.mediaEcpmSaveButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.mediaEcpmSaveButton setTitle:@"保存" forState:UIControlStateNormal];
+    [self.mediaEcpmSaveButton setTitle:@"save" forState:UIControlStateNormal];
     [self.mediaEcpmSaveButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [self.mediaEcpmSaveButton addTarget:self action:@selector(mediaEcpmSaveButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.mediaEcpmSaveButton];
@@ -86,17 +92,44 @@
         make.trailing.width.height.equalTo(self.isDebugSwitch);
     }];
     
-    self.toastTitleLabel = [[UILabel alloc] init];
-    self.toastTitleLabel.text = @"点击坐标提示toast";
-    [self.view addSubview:self.toastTitleLabel];
-    
-    [self.toastTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mediaEcpmTextField.mas_bottom).offset(12);
+    // Personalized ad recommendation switch (3rd item, always visible)
+    self.personalizedLabel = [[UILabel alloc] init];
+    self.personalizedLabel.text = @"Personalized Ads";
+    [self.view addSubview:self.personalizedLabel];
+    self.personalizedLabel.hidden = YES;
+    [self.personalizedLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mediaEcpmLabel.mas_bottom).offset(12);
         make.leading.equalTo(self.view.mas_leading).offset(30);
         make.width.mas_equalTo(200);
         make.height.mas_equalTo(30);
     }];
+
+    self.personalizedSwitch = [[UISwitch alloc] init];
+    self.personalizedSwitch.on = ([MHGAdConfiguration sharedConfig].personalizedState == 0);
+    [self.personalizedSwitch addTarget:self action:@selector(personalizedSwitchDidChange:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:self.personalizedSwitch];
+    self.personalizedSwitch.hidden = YES;
+    [self.personalizedSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.personalizedLabel);
+        make.trailing.equalTo(self.view.mas_trailing).offset(-16);
+        make.width.mas_equalTo(64);
+        make.height.equalTo(self.personalizedLabel);
+    }];
     
+    
+
+    // Toast switch (visible in developer mode)
+    self.toastTitleLabel = [[UILabel alloc] init];
+    self.toastTitleLabel.text = @"toast switch";
+    [self.view addSubview:self.toastTitleLabel];
+
+    [self.toastTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.personalizedLabel.mas_bottom).offset(12);
+        make.leading.equalTo(self.view.mas_leading).offset(30);
+        make.width.mas_equalTo(200);
+        make.height.mas_equalTo(30);
+    }];
+
     self.toastSwitch = [[UISwitch alloc] init];
     self.toastSwitch.on = [MHGAdConfiguration sharedConfig].allowToast;
     [self.toastSwitch addTarget:self action:@selector(toastSwitchDidChange:) forControlEvents:UIControlEventValueChanged];
@@ -107,13 +140,39 @@
         make.width.mas_equalTo(64);
         make.height.equalTo(self.toastTitleLabel);
     }];
-    
+
     self.toastTitleLabel.hidden = YES;
     self.toastSwitch.hidden = YES;
+
+    // Production environment switch (visible in developer mode)
+    self.envLabel = [[UILabel alloc] init];
+    self.envLabel.text = @"Production Env";
+    [self.view addSubview:self.envLabel];
+
+    [self.envLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.toastTitleLabel.mas_bottom).offset(12);
+        make.leading.equalTo(self.view.mas_leading).offset(30);
+        make.width.mas_equalTo(200);
+        make.height.mas_equalTo(30);
+    }];
+
+    self.envSwitch = [[UISwitch alloc] init];
+    self.envSwitch.on = [MHGAdConfiguration sharedConfig].isReleaseEnv;
+    [self.envSwitch addTarget:self action:@selector(envSwitchDidChange:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:self.envSwitch];
+    [self.envSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.envLabel);
+        make.trailing.equalTo(self.view.mas_trailing).offset(-16);
+        make.width.mas_equalTo(64);
+        make.height.equalTo(self.envLabel);
+    }];
+
+    self.envLabel.hidden = YES;
+    self.envSwitch.hidden = YES;
     
     
     UILabel * versionLabel = [[UILabel alloc] init];
-    versionLabel.text = [NSString stringWithFormat:@"SDK版本: %@", [MHGAdManager sharedManager].version];
+    versionLabel.text = [NSString stringWithFormat:@"SDK version: %@", [MHGAdManager sharedManager].version];
     versionLabel.userInteractionEnabled = YES;
     UITapGestureRecognizer * tapGR = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(versionLabelTap:)];
     tapGR.numberOfTapsRequired = 5;
@@ -129,14 +188,25 @@
     if ([MHGAdConfiguration sharedConfig].isDeveloperMode) {
         self.toastTitleLabel.hidden = NO;
         self.toastSwitch.hidden = NO;
+        self.envLabel.hidden = NO;
+        self.envSwitch.hidden = NO;
+        self.personalizedLabel.hidden = NO;
+        self.personalizedSwitch.hidden = NO;
     } else {
         self.toastTitleLabel.hidden = YES;
         self.toastSwitch.hidden = YES;
+        self.envLabel.hidden = YES;
+        self.envSwitch.hidden = YES;
+        self.personalizedLabel.hidden = YES;
+        self.personalizedSwitch.hidden = YES;
     }
 
     
 }
 
+- (void)envSwitchDidChange:(UISwitch * )sender {
+    [MHGAdConfiguration sharedConfig].isReleaseEnv = sender.isOn;
+}
 
 - (void)toastSwitchDidChange:(UISwitch * )sender {
     [MHGAdConfiguration sharedConfig].allowToast = sender.isOn;
@@ -144,6 +214,10 @@
 
  - (void)isDebugSwitchDidChange:(UISwitch * )sender {
     [MHGAdConfiguration sharedConfig].isDebug = sender.isOn;
+}
+
+- (void)personalizedSwitchDidChange:(UISwitch *)sender {
+    [MHGAdConfiguration sharedConfig].personalizedState = sender.isOn ? 0 : 1;
 }
      
 - (void)mediaEcpmSaveButtonDidClick {
@@ -159,9 +233,19 @@
     if ([MHGAdConfiguration sharedConfig].isDeveloperMode) {
         self.toastTitleLabel.hidden = NO;
         self.toastSwitch.hidden = NO;
+        
+        self.envLabel.hidden = NO;
+        self.envSwitch.hidden = NO;
+        self.personalizedLabel.hidden = NO;
+        self.personalizedSwitch.hidden = NO;
     } else {
         self.toastTitleLabel.hidden = YES;
         self.toastSwitch.hidden = YES;
+        
+        self.envLabel.hidden = YES;
+        self.envSwitch.hidden = YES;
+        self.personalizedLabel.hidden = YES;
+        self.personalizedSwitch.hidden = YES;
     }
 }
 

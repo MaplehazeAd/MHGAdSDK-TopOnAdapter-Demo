@@ -1,8 +1,8 @@
 //
 //  MHNewSplashViewController.h
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
-//  Created by 郭建恒 on 2024/11/25.
+//  Created by Jianheng on 2024/11/25.
 //
 
 #import <UIKit/UIKit.h>

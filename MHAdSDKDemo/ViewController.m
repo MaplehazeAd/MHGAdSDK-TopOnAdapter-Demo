@@ -28,7 +28,7 @@
     [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
         if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
         } else {
-            NSLog(@"MHAdManager error: 无法请求到IDFA, status: %ld", status);
+            NSLog(@"MHAdManager error: Failed to request IDFA, status: %ld", status);
         }
     }];
 }

@@ -1,54 +1,54 @@
 //
-//  MHRewardVideoViewController.m
+//  MHInterstitialViewController.m
 //  MHGAdSDKDemo
 //
-//  Created by guojianheng on 2024/11/12.
+//  Created by guojianheng on 2026/5/13.
 //
 
-#import "MHRewardVideoViewController.h"
+#import "MHInterstitialViewController.h"
 #import "MHCommonTableViewCell.h"
 #import "Masonry.h"
 #import "MHCommonCellModel.h"
 #import <AnyThinkSDK/ATAdManager.h>
-#import <AnyThinkSDK/ATAdManager+RewardedVideo.h>
-#import <AnyThinkSDK/ATRewardedVideoDelegate.h>
+#import <AnyThinkSDK/ATAdManager+Interstitial.h>
+#import <AnyThinkSDK/ATInterstitialDelegate.h>
 #import "UIView+toast.h"
 
-@interface MHRewardVideoViewController () <UITableViewDelegate, UITableViewDataSource, MHCommonTableViewCellDelegate, ATRewardedVideoDelegate>
+@interface MHInterstitialViewController () <UITableViewDelegate, UITableViewDataSource, MHCommonTableViewCellDelegate, ATInterstitialDelegate>
 
-@property (nonatomic, strong) UITableView *rewardTableView;
+@property (nonatomic, strong) UITableView *interstitialTableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, copy) NSString *placementID;
-@property (nonatomic, assign) BOOL isMuted;
+@property (nonatomic, assign) BOOL videoMuted;
 
 @end
 
-@implementation MHRewardVideoViewController
+@implementation MHInterstitialViewController
 
-- (UITableView *)rewardTableView {
-    if (!_rewardTableView) {
-        _rewardTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-        _rewardTableView.backgroundColor = [UIColor clearColor];
-        _rewardTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _rewardTableView.sectionFooterHeight = 0;
-        _rewardTableView.delegate = self;
-        _rewardTableView.dataSource = self;
-        [_rewardTableView registerClass:[MHCommonTableViewCell class] forCellReuseIdentifier:@"MHCommonTableViewCell"];
+- (UITableView *)interstitialTableView {
+    if (!_interstitialTableView) {
+        _interstitialTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _interstitialTableView.backgroundColor = [UIColor clearColor];
+        _interstitialTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _interstitialTableView.sectionFooterHeight = 0;
+        _interstitialTableView.delegate = self;
+        _interstitialTableView.dataSource = self;
+        [_interstitialTableView registerClass:[MHCommonTableViewCell class] forCellReuseIdentifier:@"MHCommonTableViewCell"];
     }
-    return _rewardTableView;
+    return _interstitialTableView;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.isMuted = YES;
-    self.title = @"Rewarded Video Ad";
+    self.videoMuted = YES;
+    self.title = @"Interstitial Ad";
     self.view.backgroundColor = [UIColor whiteColor];
 
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
                                                                   action:@selector(backButtonTapped)];
-    backButton.accessibilityIdentifier = @"MHRewardVideoViewController_BackButtonItem";
+    backButton.accessibilityIdentifier = @"MHInterstitialViewController_BackButtonItem";
     self.navigationItem.leftBarButtonItem = backButton;
 
     [self addTapGestureToDismissKeyboard];
@@ -57,7 +57,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"MHRewardVideoViewController dealloc");
+    NSLog(@"MHInterstitialViewController dealloc");
 }
 
 - (void)backButtonTapped {
@@ -81,14 +81,14 @@
     MHCommonCellModel *idModel = [[MHCommonCellModel alloc] init];
     idModel.cellType = MHCommonCellTypeTextField;
     idModel.title = @"Placement id";
-    idModel.content = @"n6a8d574d150b2";
+    idModel.content = @"n6a93ff39cfea6";
     self.placementID = idModel.content;
     [configArray addObject:idModel];
 
     MHCommonCellModel *muteConfigModel = [[MHCommonCellModel alloc] init];
     muteConfigModel.cellType = MHCommonCellTypeSwitch;
     muteConfigModel.title = @"Muted";
-    muteConfigModel.isSelect = self.isMuted;
+    muteConfigModel.isSelect = self.videoMuted;
     [configArray addObject:muteConfigModel];
     [self.dataArray addObject:configArray];
 
@@ -100,11 +100,11 @@
 }
 
 - (void)layoutAllSubviews {
-    [self.view addSubview:self.rewardTableView];
-    [self.rewardTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.interstitialTableView];
+    [self.interstitialTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.leading.width.bottom.equalTo(self.view);
     }];
-    [self.rewardTableView reloadData];
+    [self.interstitialTableView reloadData];
 }
 
 #pragma mark ----- UITableViewDelegate && UITableViewDataSource -----
@@ -163,9 +163,9 @@
 #pragma mark ----- MHCommonTableViewCellDelegate -----
 
 - (void)mhCommonTableViewCellButtonDidClick:(NSIndexPath *_Nullable)indexPath {
-    // Load rewarded video via TopOn; pass mute config via extra
+    // Load interstitial via TopOn; pass mute config via extra
     NSDictionary *extra = @{
-        @"MHIsMuted": self.isMuted ? @"1" : @"0"
+        @"MHIsMuted": self.videoMuted ? @"1" : @"0"
     };
     [[ATAdManager sharedManager] loadADWithPlacementID:self.placementID
                                                  extra:extra
@@ -178,7 +178,7 @@
     MHCommonCellModel *model = self.dataArray[indexPath.section][indexPath.row];
     NSString *title = model.title;
     if ([title isEqualToString:@"Muted"]) {
-        self.isMuted = isOpen;
+        self.videoMuted = isOpen;
     }
 }
 
@@ -186,56 +186,44 @@
     self.placementID = text;
 }
 
-#pragma mark ----- ATRewardedVideoDelegate -----
+#pragma mark ----- ATInterstitialDelegate -----
 
 /// Load succeeded — show immediately
 - (void)didFinishLoadingADWithPlacementID:(NSString *)placementID {
-    NSLog(@"RewardedVideo didFinishLoadingADWithPlacementID: %@", placementID);
-    [[ATAdManager sharedManager] showRewardedVideoWithPlacementID:placementID
+    NSLog(@"Interstitial didFinishLoadingADWithPlacementID: %@", placementID);
+    [[ATAdManager sharedManager] showInterstitialWithPlacementID:placementID
                                                 inViewController:self
                                                         delegate:self];
 }
 
 /// Load failed
 - (void)didFailToLoadADWithPlacementID:(NSString *)placementID error:(NSError *)error {
-    NSString *errorMsg = [NSString stringWithFormat:@"RV load failed: %ld - %@", (long)error.code, error.localizedDescription];
-    [self.view makeToast:errorMsg duration:2.0F position:CSToastPositionCenter];
+    NSString *errorMsg = [NSString stringWithFormat:@"Interstitial load failed: %ld - %@", (long)error.code, error.localizedDescription];
+    [[UIApplication sharedApplication].keyWindow makeToast:errorMsg duration:2.0F position:CSToastPositionCenter];
 }
 
-/// Playback started
-- (void)rewardedVideoDidStartPlayingForPlacementID:(NSString *)placementID extra:(NSDictionary *)extra {
-    NSLog(@"RewardedVideo didStartPlaying");
-    [self.view makeToast:@"Rewarded video started playing" duration:2.0F position:CSToastPositionTop];
-}
-
-/// Playback ended
-- (void)rewardedVideoDidEndPlayingForPlacementID:(NSString *)placementID extra:(NSDictionary *)extra {
-    NSLog(@"RewardedVideo didEndPlaying");
-    [[UIApplication sharedApplication].keyWindow makeToast:@"Rewarded video playback ended" duration:2.0F position:CSToastPositionTop];
+/// Ad shown
+- (void)interstitialDidShowForPlacementID:(NSString *)placementID extra:(NSDictionary *)extra {
+    NSLog(@"Interstitial didShow");
+    [[UIApplication sharedApplication].keyWindow makeToast:@"Interstitial ad shown" duration:2.0F position:CSToastPositionCenter];
 }
 
 /// Clicked
-- (void)rewardedVideoDidClickForPlacementID:(NSString *)placementID extra:(NSDictionary *)extra {
-    NSLog(@"RewardedVideo didClick");
-    [[UIApplication sharedApplication].keyWindow makeToast:@"Rewarded video clicked" duration:2.0F position:CSToastPositionCenter];
+- (void)interstitialDidClickForPlacementID:(NSString *)placementID extra:(NSDictionary *)extra {
+    NSLog(@"Interstitial didClick");
+    [[UIApplication sharedApplication].keyWindow makeToast:@"Interstitial ad clicked" duration:2.0F position:CSToastPositionCenter];
 }
 
-/// Closed (rewarded indicates whether the reward should be granted)
-- (void)rewardedVideoDidCloseForPlacementID:(NSString *)placementID rewarded:(BOOL)rewarded extra:(NSDictionary *)extra {
-    NSLog(@"RewardedVideo didClose rewarded=%d", rewarded);
-    [[UIApplication sharedApplication].keyWindow makeToast:@"Rewarded video closed" duration:2.0F position:CSToastPositionTop];
-}
-
-/// Reward granted
-- (void)rewardedVideoDidRewardSuccessForPlacemenID:(NSString *)placementID extra:(NSDictionary *)extra {
-    NSLog(@"RewardedVideo didRewardSuccess");
-    [self.view makeToast:@"Reward granted!" duration:2.0F position:CSToastPositionTop];
+/// Closed
+- (void)interstitialDidCloseForPlacementID:(NSString *)placementID extra:(NSDictionary *)extra {
+    NSLog(@"Interstitial didClose");
+    [[UIApplication sharedApplication].keyWindow makeToast:@"Interstitial ad closed" duration:2.0F position:CSToastPositionCenter];
 }
 
 /// Show failed
-- (void)rewardedVideoDidFailToPlayForPlacementID:(NSString *)placementID error:(NSError *)error extra:(NSDictionary *)extra {
-    NSLog(@"RewardedVideo didFailToPlay: %@", error);
-    [self.view makeToast:[NSString stringWithFormat:@"Show failed: %@", error.localizedDescription] duration:2.0F position:CSToastPositionCenter];
+- (void)interstitialFailedToShowForPlacementID:(NSString *)placementID error:(NSError *)error extra:(NSDictionary *)extra {
+    NSLog(@"Interstitial failedToShow: %@", error);
+    [[UIApplication sharedApplication].keyWindow makeToast:[NSString stringWithFormat:@"Show failed: %@", error.localizedDescription] duration:2.0F position:CSToastPositionCenter];
 }
 
 @end

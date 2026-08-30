@@ -1,6 +1,6 @@
 //
 //  MHMainViewController.m
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
 //  Created by guojianheng on 2024/11/11.
 //
@@ -11,12 +11,12 @@
 #import "MHSplashViewController.h"
 #import "MHRewardVideoViewController.h"
 #import "MHNativeViewController.h"
-
+#import "MHInterstitialViewController.h"
 #import "MHSettingViewController.h"
 
 @interface MHMainViewController ()<UITableViewDelegate, UITableViewDataSource>
 
-// 首页的表视图
+
 @property (nonatomic, strong) UITableView * mainTableView;
 
 @property (nonatomic, strong) NSArray * dataArray;
@@ -25,17 +25,13 @@
 
 @implementation MHMainViewController
 
-// 懒加载mainTableView
+// Lazy load mainTableView
 - (UITableView *)mainTableView {
     if (!_mainTableView) {
         _mainTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        // 背景色
         _mainTableView.backgroundColor = [UIColor clearColor];
-        // 代理
         _mainTableView.delegate = self;
         _mainTableView.dataSource = self;
-        
-        // 注册cell
         [_mainTableView registerClass:[MHMainTableViewCell class] forCellReuseIdentifier:@"MHMainTableViewCell"];
     }
     return _mainTableView;
@@ -43,10 +39,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"枫岚广告SDK";
+    self.title = @"MHGAdSDK Demo";
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIBarButtonItem *settingButton = [[UIBarButtonItem alloc] initWithTitle:@"设置"
+    UIBarButtonItem *settingButton = [[UIBarButtonItem alloc] initWithTitle:@"Setting"
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
                                                                   action:@selector(settingButtonTapped)];
@@ -58,16 +54,13 @@
 }
 
 - (void)settingButtonTapped {
-    
-    // 去设置页面
     MHSettingViewController * settingVC = [[MHSettingViewController alloc]init];
     [self.navigationController pushViewController:settingVC animated:YES];
     
 }
 
 - (void)getData {
-    //self.dataArray = @[@"开屏广告", @"原生广告", @"激励广告"];
-    self.dataArray = @[@"开屏广告", @"原生自渲染广告", @"激励视频广告"];
+    self.dataArray = @[@"Splash Ad", @"Native Ad", @"Rewarded Video Ad", @"Interstitial Ad"];
     
 }
 
@@ -120,26 +113,29 @@
     switch (row) {
         case 0:
         {
-            // 开屏
             MHSplashViewController * splashVC = [[MHSplashViewController alloc] init];
             [self.navigationController pushViewController:splashVC animated:true];
             break;
         }
         case 1:
         {
-            // 原生
             MHNativeViewController * nativeVC = [[MHNativeViewController alloc] init];
             [self.navigationController pushViewController:nativeVC animated:true];
             break;
         }
         case 2:
         {
-            // 激励视频
             MHRewardVideoViewController * rewardedVC = [[MHRewardVideoViewController alloc] init];
             [self.navigationController pushViewController:rewardedVC animated:true];
             break;
         }
-
+            
+        case 3:
+        {
+            MHInterstitialViewController * interstitialVC = [[MHInterstitialViewController alloc] init];
+            [self.navigationController pushViewController:interstitialVC animated:true];
+            break;
+        }
             
         default:
             break;

@@ -1,8 +1,8 @@
 //
 //  MHSettingViewController.h
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
-//  Created by 郭建恒 on 2025/6/5.
+//  Created by Jianheng on 2025/6/5.
 //
 
 #import <UIKit/UIKit.h>

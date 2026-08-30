@@ -1,6 +1,6 @@
 //
 //  MHCommonTableViewCell.h
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
 //  Created by guojianheng on 2024/11/12.
 //
@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import "MHCommonCellModel.h"
 
-// cell的代理回调
 @protocol MHCommonTableViewCellDelegate <NSObject>
 
 - (void)mhCommonTableViewCellButtonDidClick:(NSIndexPath *_Nullable)indexPath;

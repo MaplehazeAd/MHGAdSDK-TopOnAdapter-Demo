@@ -1,6 +1,6 @@
 //
 //  MHRewardVideoViewController.h
-//  MHAdSDKDemo
+//  MHGAdSDKDemo
 //
 //  Created by guojianheng on 2024/11/12.
 //

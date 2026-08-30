@@ -1,8 +1,8 @@
 //
-//  MHNewNativeViewController.h
-//  MHAdSDKDemo
+//  MHNativeViewController2.h
+//  MHGAdSDKDemo
 //
-//  Created by 郭建恒 on 2024/11/21.
+//  Created by Jianheng on 2026/1/9.
 //
 
 #import <UIKit/UIKit.h>
@@ -10,7 +10,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MHNativeViewController : UIViewController
-
 
 @end
 
