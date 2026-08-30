@@ -1,5 +1,3 @@
-source 'https://cdn.cocoapods.org/'
-
 platform :ios, '13.0'
 
 target 'MHAdSDKDemo' do
@@ -10,12 +8,11 @@ target 'MHAdSDKDemo' do
   #TPN Adx SDK(necessary)
   pod 'TPNMediationAdxSmartdigimktAdapter','6.5.75.2.2'
 
-  # MHGAdSDK xcframework 本地分发
-  # pod 'MHGAdSDK', :path => './'
+  # MHGAdSDK 
   pod 'MHGAdSDK','1.0.0'
 
-  # MHGAdSDK TopOn 自定义适配器（本地）
-  pod 'MHGAdSDK-TopOnAdapter', :path => './'
+  # MHGAdSDK-TopOnAdapter
+  pod 'MHGAdSDK-TopOnAdapter', '1.0.0'
 
   pod 'Google-Mobile-Ads-SDK', '~> 13.5.0'
 end

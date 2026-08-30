@@ -73,6 +73,8 @@ target 'MHAdSDKDemo' do
 
   # MHGAdSDK TopOn custom adapter
   pod 'MHGAdSDK-TopOnAdapter', '~> 1.0.0'
+  
+  pod 'Google-Mobile-Ads-SDK', '~> 13.5.0'
 end
 ```
 
