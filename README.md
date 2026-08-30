@@ -65,14 +65,14 @@ target 'MHAdSDKDemo' do
   use_frameworks! :linkage => :static
 
   # MH Ad SDK
-  pod 'MHGAdSDK', '~> 1.4.6'
+  pod 'MHGAdSDK', '~> 1.0.0'
 
   # TopOn mediation platform
   pod 'TPNiOS', '6.5.80'
   pod 'TPNMediationAdxSmartdigimktCNAdapter', '6.5.77.2.0'
 
   # MHGAdSDK TopOn custom adapter
-  pod 'MHGAdSDK-TopOnAdapter', :path => './'
+  pod 'MHGAdSDK-TopOnAdapter', '~> 1.0.0'
 end
 ```
 
