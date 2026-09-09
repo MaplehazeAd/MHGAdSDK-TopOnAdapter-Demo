@@ -16,7 +16,7 @@
     if (!self.mhgNativeAdView) {
         return;
     }
-    // 委托 MHGAdSDK 内部注册点击追踪
+    // Delegate click tracking to MHGAdSDK internally
     [self.mhgNativeAdView registerClickableViewArray:clickableViews];
 }
 

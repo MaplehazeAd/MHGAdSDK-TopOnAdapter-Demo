@@ -9,10 +9,10 @@ target 'MHAdSDKDemo' do
   pod 'TPNMediationAdxSmartdigimktAdapter','6.5.75.2.2'
 
   # MHGAdSDK 
-  pod 'MHGAdSDK','1.0.0'
+  pod 'MHGAdSDK','1.0.2'
 
   # MHGAdSDK-TopOnAdapter
-  pod 'MHGAdSDK-TopOnAdapter', '1.0.0'
+  pod 'MHGAdSDK-TopOnAdapter', '1.0.2'
 
   pod 'Google-Mobile-Ads-SDK', '~> 13.5.0'
 end

@@ -23,13 +23,13 @@ static NSString *const kMHGATAdapterVersion = @"1.0.0";
         config.appID = appID;
     }
 
-    // 个性化推荐
+    // Personalized ads
     config.personalizedState = adInitArgument.personalizedAdState;
 
-    // 执行 MHGAdSDK 注册
+    // Register with MHGAdSDK
     [[MHGAdManager sharedManager] registerApp];
 
-    // MHGAdSDK 没有明确的初始化成功/失败回调，直接通知成功
+    // MHGAdSDK has no explicit init success/failure callback, notify success directly
     [self notificationNetworkInitSuccess];
 }
 

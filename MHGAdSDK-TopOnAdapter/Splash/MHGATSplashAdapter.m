@@ -57,10 +57,10 @@
 
 - (void)didReceiveBidResult:(ATBidWinLossResult *)result {
     if (result.bidResultType == ATBidWinLossResultTypeWin && self.splashAd) {
-        NSInteger price = result.winPrice ? [result.winPrice integerValue] : 0;
+        NSString * price = result.winPrice;
         [self.splashAd sendWinNotification:price];
     } else if (self.splashAd) {
-        NSInteger price = result.secondPrice ? [result.secondPrice integerValue] : 0;
+        NSString * price = result.secondPrice;
         [self.splashAd sendLossNotification:price];
     }
 }

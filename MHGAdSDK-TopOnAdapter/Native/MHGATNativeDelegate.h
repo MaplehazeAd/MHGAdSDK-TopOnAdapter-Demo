@@ -14,19 +14,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) ATNativeAdStatusBridge *adStatusBridge;
 
-/// 最近一次加载的 MHGNativeAd 对象（用于 rendererWithRenderView 等）
+/// Last loaded MHGNativeAd object (for rendererWithRenderView, etc.)
 + (nullable MHGNativeAd *)lastLoadedNativeAd;
 
-/// 最近一次加载的广告数组（adapter 层 wrapper）
+/// Last loaded native ad array (adapter-layer wrappers)
 + (nullable NSArray<MHGATNetworkNativeAd *> *)lastLoadedNativeAds;
 
-/// 最近一次加载的 MHGNativeAdModel 数组（供 Demo VC 直接渲染）
+/// Last loaded MHGNativeAdModel array (for Demo VC direct rendering)
 + (nullable NSArray<MHGNativeAdModel *> *)lastLoadedModels;
 
-/// 是否有已加载的广告
+/// Whether ads have been loaded
 + (BOOL)hasLoadedAds;
 
-/// 清空缓存
+/// Clear cache
 + (void)clearCache;
 
 @end

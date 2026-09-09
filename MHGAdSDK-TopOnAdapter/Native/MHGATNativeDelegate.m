@@ -53,37 +53,37 @@ static NSArray<MHGNativeAdModel *> *_lastModels = nil;
         return;
     }
 
-    // 存储 MHGNativeAd 引用 + models（sideband 模式）
+    // Store MHGNativeAd reference + models (sideband pattern)
     _lastNativeAd = nativeAd;
     _lastModels = [nativeAdModels copy];
 
-    // 将 MHGNativeAdModel 转换为 MHGATNetworkNativeAd
+    // Convert MHGNativeAdModel to MHGATNetworkNativeAd
     NSMutableArray<MHGATNetworkNativeAd *> *nativeAdArray = [NSMutableArray arrayWithCapacity:nativeAdModels.count];
     for (MHGNativeAdModel *model in nativeAdModels) {
         MHGATNetworkNativeAd *nativeAdObj = [[MHGATNetworkNativeAd alloc] init];
 
-        // 基础属性映射
+        // Basic property mapping
         nativeAdObj.title = model.title ?: @"";
         nativeAdObj.mainText = model.description ?: @"";
-        nativeAdObj.ctaText = model.actionText ?: @"查看详情";
+        nativeAdObj.ctaText = model.actionText ?: @"Learn More";
         nativeAdObj.iconUrl = model.iconURL ?: @"";
         nativeAdObj.imageUrl = model.imageURL ?: @"";
         nativeAdObj.mainImageWidth = (CGFloat)model.imageWidth;
         nativeAdObj.mainImageHeight = (CGFloat)model.imageHeight;
         nativeAdObj.isVideoContents = model.isVideoAd;
 
-        // 创建 MHGNativeAdView 并绑定数据
+        // Create MHGNativeAdView and bind data
         MHGNativeAdView *adView = [[MHGNativeAdView alloc] init];
         adView.nativeAdModel = model;
         nativeAdObj.mhgNativeAdView = adView;
 
-        // 保存原始 model 引用
+        // Keep original model reference
         nativeAdObj.mhgNativeAdModel = model;
 
-        // 强引用 MHGNativeAd，保持 adapter→viewCreator 链路存活（weak 引用问题）
+        // Strong reference to MHGNativeAd to keep adapter->viewCreator chain alive (weak ref issue)
         nativeAdObj.mhgNativeAd = nativeAd;
 
-        // 优惠券模型转换
+        // Coupon model conversion
         MHGNativeAdCouponModel *mhgCoupon = model.coupon;
         if (mhgCoupon) {
             MHGATNativeCouponModel *coupon = [[MHGATNativeCouponModel alloc] init];
@@ -97,27 +97,28 @@ static NSArray<MHGNativeAdModel *> *_lastModels = nil;
             nativeAdObj.coupon = coupon;
         }
 
-        // 保存原始 model 到 networkNativeAdProduct（兼容 sideband）
+        // Store original model in networkNativeAdProduct (sideband compat)
         nativeAdObj.networkNativeAdProduct = model;
 
         [nativeAdArray addObject:nativeAdObj];
     }
 
-    _lastNativeAds = [nativeAdArray copy];
-
-    // 逐个上报 eCPM
+    // Report each model's eCPM to TopOn individually
     for (NSUInteger i = 0; i < nativeAdModels.count; i++) {
         MHGNativeAdModel *model = nativeAdModels[i];
         MHGATNetworkNativeAd *nativeAdObj = nativeAdArray[i];
 
-        NSInteger ecpm = model.ecpm;
-        NSString *priceStr = [NSString stringWithFormat:@"%ld", (long)ecpm];
-        if ([priceStr doubleValue] < 0) { priceStr = @"0"; }
+        NSString *ecpm = [model ecpm];
+        if ([ecpm doubleValue] <= 0) {
+            ecpm = @"0";
+        }
 
         NSDictionary *adExtra = @{
-            ATAdSendC2SBidPriceKey: priceStr,
-            ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeUS)
+            ATAdSendC2SBidPriceKey: ecpm,
+            ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeCNYCents),
+            ATAdSendC2SBidInfoKey: @{@"modelIndex": @(i)}
         };
+        NSLog(@"[MHGAT] report model[%lu] ecpm=%@ isVideo=%d", (unsigned long)i, ecpm, model.isVideoAd);
         [self.adStatusBridge atOnNativeAdLoadedArray:@[nativeAdObj] adExtra:adExtra];
     }
 }

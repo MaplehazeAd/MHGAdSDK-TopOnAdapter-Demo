@@ -6,6 +6,7 @@
 #import "MHGATNativeAdapter.h"
 #import "MHGATNativeDelegate.h"
 #import <MHGAdSDK/MHGNativeAd.h>
+#import <MHGAdSDK/MHGNativeAdModel.h>
 
 @interface MHGATNativeAdapter ()
 
@@ -33,11 +34,11 @@
         placementID = serverContentDic[@"placement_id"];
     }
 
-    // 创建 Configuration
+    // Create configuration
     MHGNativeAdConfiguration *configuration = [[MHGNativeAdConfiguration alloc] init];
     configuration.placementID = placementID;
 
-    // 静音配置
+    // Muted config
     NSString *muteStr = argument.localInfoDic[@"MHIsMuted"];
     if (muteStr) {
         configuration.isMuted = [muteStr boolValue];
@@ -45,7 +46,7 @@
         configuration.isMuted = YES;
     }
 
-    // 自动播放配置
+    // Auto-play config
     NSString *autoPlayStr = argument.localInfoDic[@"MHAutoPlayMobileNetwork"];
     if (autoPlayStr) {
         configuration.isVideoAutoPlayWithMobileNetwork = [autoPlayStr boolValue];
@@ -57,6 +58,24 @@
     self.nativeAd.delegate = self.nativeDelegate;
 
     [self.nativeAd loadAd];
+}
+
+- (void)didReceiveBidResult:(ATBidWinLossResult *)result {
+    NSLog(@"[MHGAT] didReceiveBidResult type=%ld winPrice=%@ secondPrice=%@ lossReason=%ld userInfoDic=%@",
+          (long)result.bidResultType, result.winPrice, result.secondPrice,
+          (long)result.lossReasonType, result.userInfoDic);
+
+    // Only use firstObject — native ads only serve one ad by default
+    MHGNativeAdModel *model = [MHGATNativeDelegate lastLoadedModels].firstObject;
+    if (!model) {
+        return;
+    }
+
+    if (result.bidResultType == ATBidWinLossResultTypeWin) {
+        [model sendWinNotification:result.winPrice];
+    } else {
+        [model sendLossNotification:result.secondPrice];
+    }
 }
 
 @end

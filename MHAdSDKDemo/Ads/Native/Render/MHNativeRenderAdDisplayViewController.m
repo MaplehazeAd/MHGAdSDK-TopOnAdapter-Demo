@@ -98,14 +98,9 @@
         NSLog(@"nativeAdDidLoad nativeAdModel[%d]: %p", i, nativeModel);
 
         // ----- Ecpm -----
-        NSInteger nativeEcpm = nativeModel.ecpm;
+        NSString * nativeEcpm = nativeModel.ecpm;
         NSString *ecpmString = [NSString stringWithFormat:@"current ad ecpm[%d]: %ld", i, (long)nativeEcpm];
         [self.view makeToast:ecpmString duration:2.0F position:CSToastPositionCenter];
-
-        // Send win notification
-        if (nativeEcpm != -1) {
-            [nativeModel sendWinNotification:nativeEcpm];
-        }
 
         [self.adArray addObject:nativeModel];
 

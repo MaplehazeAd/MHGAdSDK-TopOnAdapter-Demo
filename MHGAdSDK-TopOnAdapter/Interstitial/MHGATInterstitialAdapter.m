@@ -36,7 +36,7 @@
     self.interstitialAd = [[MHGInterstitialAd alloc] initWithPlacementID:placementID];
     self.interstitialAd.delegate = self.interstitialDelegate;
 
-    // 静音配置
+    // Muted config
     NSString *muteStr = argument.localInfoDic[@"MHIsMuted"];
     if (muteStr) {
         self.interstitialAd.videoMuted = [muteStr boolValue];
@@ -57,10 +57,10 @@
 
 - (void)didReceiveBidResult:(ATBidWinLossResult *)result {
     if (result.bidResultType == ATBidWinLossResultTypeWin && self.interstitialAd) {
-        NSInteger price = result.winPrice ? [result.winPrice integerValue] : 0;
+        NSString * price = result.winPrice;
         [self.interstitialAd sendWinNotification:price];
     } else if (self.interstitialAd) {
-        NSInteger price = result.secondPrice ? [result.secondPrice integerValue] : 0;
+        NSString * price = result.secondPrice;
         [self.interstitialAd sendLossNotification:price];
     }
 }

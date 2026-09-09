@@ -36,7 +36,7 @@
     self.rewardedVideoAd = [[MHGRewardedVideoAd alloc] initWithPlacementID:placementID];
     self.rewardedVideoAd.delegate = self.rvDelegate;
 
-    // 静音配置
+    // Muted config
     NSString *muteStr = argument.localInfoDic[@"MHIsMuted"];
     if (muteStr) {
         self.rewardedVideoAd.isMuted = [muteStr boolValue];
@@ -57,10 +57,10 @@
 
 - (void)didReceiveBidResult:(ATBidWinLossResult *)result {
     if (result.bidResultType == ATBidWinLossResultTypeWin && self.rewardedVideoAd) {
-        NSInteger price = result.winPrice ? [result.winPrice integerValue] : 0;
+        NSString * price = result.winPrice;
         [self.rewardedVideoAd sendWinNotification:price];
     } else if (self.rewardedVideoAd) {
-        NSInteger price = result.secondPrice ? [result.secondPrice integerValue] : 0;
+        NSString * price = result.secondPrice;
         [self.rewardedVideoAd sendLossNotification:price];
     }
 }

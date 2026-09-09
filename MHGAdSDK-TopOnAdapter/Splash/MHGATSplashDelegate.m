@@ -9,15 +9,14 @@
 
 - (void)splashAdDidLoad:(MHGSplashAd *)splashAd placementID:(NSString *)placementID {
     NSLog(@"[MHGAT] %@", NSStringFromSelector(_cmd));
-    NSInteger ecpm = [splashAd ecpm];
-    NSLog(@"[MHGAT] ecpm=%ld", (long)ecpm);
+    NSString * ecpm = [splashAd ecpm];
+    NSLog(@"[MHGAT] ecpm=%@", ecpm);
 
-    NSString *priceStr = [NSString stringWithFormat:@"%ld", (long)ecpm];
-    if ([priceStr doubleValue] < 0) { priceStr = @"0"; }
+    if ([ecpm doubleValue] <= 0) { ecpm = @"0"; }
 
     NSDictionary *extra = @{
-        ATAdSendC2SBidPriceKey: priceStr,
-        ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeUS)
+        ATAdSendC2SBidPriceKey: ecpm,
+        ATAdSendC2SCurrencyTypeKey: @(ATBiddingCurrencyTypeCNYCents)
     };
     [self.adStatusBridge atOnSplashAdLoadedExtra:extra];
 }
