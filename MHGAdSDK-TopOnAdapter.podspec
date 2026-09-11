@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'MHGAdSDK-TopOnAdapter/**/*.{h,m}'
   s.public_header_files = 'MHGAdSDK-TopOnAdapter/**/*.h'
+  s.resources = 'MHGAdSDK-TopOnAdapter/PrivacyInfo.xcprivacy'
 
   s.dependency 'MHGAdSDK'
   s.dependency 'TPNiOS', '~> 6.5.73'
